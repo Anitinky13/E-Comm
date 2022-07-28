@@ -8,12 +8,10 @@ router.get("/", (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   Tag.findAll({
-    include: [
-      {
-        model: Product,
-        through: ProductTag,
-      },
-    ],
+    include: {
+      model: Product,
+      through: ["product_name", "price", "stock", "category_id"],
+    },
   })
     .then((dbTagData) => res.json(dbTagData))
     .catch((err) => {
@@ -27,13 +25,11 @@ router.get("/:id", (req, res) => {
   // be sure to include its associated Product data
   Tag.findOne({
     where: { id: req.params.id },
-    include: [
-      {
-        model: Product,
-        through: ProductTag,
-        attributes: ["id", "product_name", "price", "stock", "category_id"],
-      },
-    ],
+    include: {
+      model: Product,
+
+      attributes: ["product_name", "price", "stock", "category_id"],
+    },
   })
     .then((dbTagData) => res.json(dbTagData))
     .catch((err) => {
@@ -45,8 +41,8 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   // create a new tag
   Tag.create({
-    title: req.body.title,
-    tag_url: req.body.tag_url,
+    //     title: req.body.title,
+    //     tag_url: req.body.tag_url,
     tag_name: req.body.tag_name,
   })
     .then((dbTagData) => res.json(dbTagData))
